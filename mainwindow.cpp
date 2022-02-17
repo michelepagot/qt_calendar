@@ -53,8 +53,7 @@ void MainWindow::on_pushButton_save_clicked()
 
     if(! this->m_reg->have(selected_date))
     {
-        DayData *d = new DayData(selected_date, ui->textEdit_currentDate->toPlainText());
-        if(this->m_reg->add(d))
+        if(this->m_reg->add(selected_date, ui->textEdit_currentDate->toPlainText()))
         {
             ui->calendarWidget->setDateTextFormat(selected_date, format);
         }

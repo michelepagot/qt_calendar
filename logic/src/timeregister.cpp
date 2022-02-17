@@ -15,13 +15,14 @@ bool TimeRegister::saveToFile(QString)
     return true;
 }
 
-bool TimeRegister::add(DayData *d)
+bool TimeRegister::add(QDate d, QString msg)
 {
-    if(m_data.contains(d))
+    if(have(d))
     {
         return false;
     }
-    m_data.append(d);
+    DayData *p_dd = new DayData(d, msg);
+    m_data.append(p_dd);
     return true;
 }
 

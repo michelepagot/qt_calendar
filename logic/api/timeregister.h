@@ -11,7 +11,7 @@ public:
     TimeRegister(int year);
     bool loadFromFile(QString);
     bool saveToFile(QString);
-    bool add(DayData *d);
+    bool add(QDate d, QString msg);
     bool remove(QDate date);
     bool have(QDate date);
     QString getMessage(QDate date);
