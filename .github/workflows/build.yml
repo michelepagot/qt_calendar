@@ -1,0 +1,98 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  VCINSTALLDIR: C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/
+  Qt5_DIR: Qt\5.13.1\msvc2017_64\lib\cmake\Qt5\
+  QTDIR: Qt\5.13.1\msvc2017_64\
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+
+
+        
+jobs:
+  windows:
+    timeout-minutes: 15
+    runs-on: windows-2019
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Prepare
+      working-directory: build
+      shell: cmd
+      run: |
+        curl -vLo qt-unified-windows-x86-online.exe http://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe
+        qt-unified-windows-x86-online.exe --verbose --script ..\ci\qt.qs
+        
+    #- name: QtPrepare
+      #uses: jurplel/install-qt-action@v2
+      #with:
+        #version: '5.15.2'
+        #host: 'windows'
+        #target: 'desktop'
+        #arch: 'win64_msvc2019_64'
+        #dir: '${{ github.workspace }}/example/'
+        #install-deps: 'true'
+        #modules: 'qtcharts qtwebengine'
+        #cached: 'false'
+        #setup-python: 'true'
+        #tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
+        # set-env: 'false'
+        #tools-only: 'false'
+        #aqtversion: '==2.0.0'
+        #py7zrversion: '==0.16.1'
+        #extra: '--external 7z'
+    - name: Configure
+      shell: cmd
+      run: cmake -B ${{github.workspace}}/build  -DCPACK_IFW_ROOT=Qt/Tools/QtInstallerFramework/3.1 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G"Visual Studio 16 2019" ..
+
+    - name: Compile
+      shell: cmd
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j 4
+
+    - name: Package
+      shell: cmd
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target package
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: build/gh-greets-qt_installer.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
+    # You can convert this to a matrix build if you need cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+    - name: Build
+      # Build your program with the given configuration
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      # Execute tests defined by the CMake configuration.  
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: ctest -C ${{env.BUILD_TYPE}}
+      
+
