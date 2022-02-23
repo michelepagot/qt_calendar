@@ -10,6 +10,7 @@ env:
   VCINSTALLDIR: C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/
   Qt5_DIR: Qt\5.13.1\msvc2017_64\lib\cmake\Qt5\
   QTDIR: Qt\5.13.1\msvc2017_64\
+  QTVER: 6.2.0
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
 
@@ -29,7 +30,7 @@ jobs:
     - name: Prepare
       uses: WillBrennan/yaqti@2021.07.27.1
       with:
-        version: 6.2.1
+        version: ${{env.QTVER}}
         os: windows
         platform: desktop
         
@@ -88,7 +89,7 @@ jobs:
     
     - uses: WillBrennan/yaqti@2021.07.27.1
       with:
-        version: 6.2.1
+        version: ${{env.QTVER}}
         os: linux
         platform: desktop
 
