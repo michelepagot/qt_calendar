@@ -33,6 +33,7 @@ jobs:
         version: ${{env.QTVER}}
         os: windows
         platform: desktop
+        modules: ''
         
       #working-directory: build
       #shell: cmd
@@ -92,6 +93,7 @@ jobs:
         version: ${{env.QTVER}}
         os: linux
         platform: desktop
+        modules: ''
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
