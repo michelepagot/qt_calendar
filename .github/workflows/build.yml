@@ -7,9 +7,9 @@ on:
     branches: [ main ]
 
 env:
-  VCINSTALLDIR: C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/
-  Qt5_DIR: Qt\5.13.1\msvc2017_64\lib\cmake\Qt5\
-  QTDIR: Qt\5.13.1\msvc2017_64\
+  #VCINSTALLDIR: C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/
+  #Qt5_DIR: Qt\5.13.1\msvc2017_64\lib\cmake\Qt5\
+  #QTDIR: Qt\5.13.1\msvc2017_64\
   QTVER: 6.2.0
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
@@ -86,7 +86,7 @@ jobs:
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_PREFIX_PATH=${{github.workspace}}/build/qt/${{env.QTVER}}/gcc_64/lib/cmake/Qt6/
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_PREFIX_PATH=${{github.workspace}}/build/qt/${{env.QTVER}}/gcc_64/
 
     - name: Build
       # Build your program with the given configuration
