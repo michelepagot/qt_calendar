@@ -38,7 +38,7 @@ jobs:
         python --version
         pip install yaqti
         python -m yaqti install --help
-        python -m yaqti install --version ${{env.QTVER}} --platform desktop --os windows  --modules qtcharts    
+        python -m yaqti install --version ${{env.QTVER}} --platform desktop --os windows  --modules qt5compat    
 
     - name: Configure
       shell: cmd
@@ -80,7 +80,7 @@ jobs:
         python --version
         pip install yaqti
         python -m yaqti install --help
-        python -m yaqti install --version ${{env.QTVER}} --platform desktop --os linux --modules qtcharts   
+        python -m yaqti install --version ${{env.QTVER}} --platform desktop --os linux --modules qt5compat   
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
