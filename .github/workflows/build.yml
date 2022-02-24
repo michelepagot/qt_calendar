@@ -80,12 +80,13 @@ jobs:
         python --version
         pip install yaqti
         python -m yaqti install --help
-        python -m yaqti install --version ${{env.QTVER}} --platform desktop --os linux --modules qt5compat   
+        python -m yaqti install --output ${{github.workspace}}/build/qt --version ${{env.QTVER}} --platform desktop --os linux --modules qt5compat
+        find ${{github.workspace}}/build/qt -iname "Qt6Config.cmake"
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_PREFIX_PATH=${{github.workspace}}/build/qt
 
     - name: Build
       # Build your program with the given configuration
